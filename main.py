@@ -4,11 +4,13 @@ from argparse import ArgumentParser
 from src.train import train
 from utils.utils import strtobool
 import os
-# import local_config
-# import wandb
+import local_config
+import wandb
+from functools import partial 
 
 
 def main(hyperparams):
+    # run = wandb.init()
     print(hyperparams)
     epoch = hyperparams.epoch
     lr = hyperparams.lr
@@ -22,6 +24,7 @@ def main(hyperparams):
     seed = hyperparams.seed
     lora = hyperparams.lora
     lora_r = hyperparams.lora_r
+    # lora_r = wandb.config.lora_r 
     l1_reg = hyperparams.l1_reg
     l1_lambda = hyperparams.l1_lambda
 
@@ -43,20 +46,22 @@ def main(hyperparams):
 
 if __name__ == "__main__":
     # todo setup wandb key and username
-    # os.environ['WANDB_API_KEY'] = local_config.WANDB_KEY
-    # os.environ['WANDB_ENTITY'] = local_config.WANDB_USERNAME
+    os.environ['WANDB_API_KEY'] = local_config.WANDB_KEY
+    os.environ['WANDB_ENTITY'] = local_config.WANDB_USERNAME
+    os.environ["WANDB_MODE"] = "offline"
     # wandb.login()
 
     Parser = ArgumentParser()
     Parser.register('type', 'bool', strtobool)
 
     # training hyperparameters
-    Parser.add_argument("--epoch", type=int, default=5)
+    Parser.add_argument("--epoch", type=int, default=200)
     Parser.add_argument('--lr', type=float, default=5e-5)
     Parser.add_argument('--batch_size', type=int, default=64)
     Parser.add_argument('--last_layer', type='bool', default=False, help='Only optimize the last layer')
     Parser.add_argument('--lora', type='bool', default=True, help='whether use lora')
     Parser.add_argument('--lora_r', type=int, default=10, help='hyperparameter for lora rank')
+    # Parser.add_argument("--lora_r", nargs="+", help='hyperparameter for lora rank')
     Parser.add_argument("--device", default="cuda", type=str)
     Parser.add_argument("--model", default="SoftmaxBERT", type=str)
     Parser.add_argument("--finetune_strategy", type=str)
@@ -75,4 +80,16 @@ if __name__ == "__main__":
     # partially done, getting the whole model directly from the cli
 
     hyperparams = Parser.parse_args()
+
+    # sweep_config = {
+    #     'method': "grid",
+    #     'parameters':{
+    #         'lora_r': {"values": [40,50,60,70,80,90,100]},
+    #     }
+    # }
+    
+    # sweep_id = wandb.sweep(sweep=sweep_config, project="lora_r hyperparameter")
+    # train = partial(main, hyperparams)
+    # wandb.agent(sweep_id, function=train)
     main(hyperparams)
+    

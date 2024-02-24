@@ -4,7 +4,7 @@ from utils.train_utils import validation, test, get_model
 import torch.nn as nn
 import src.dataset as datasets
 from tqdm import tqdm 
-
+import wandb 
 
 def train(model,
           epoch,
@@ -30,7 +30,8 @@ def train(model,
 
     train_loader = DataLoader(training_set,
                               batch_size=batch_size,
-                              shuffle=True,)
+                              shuffle=True,
+                              num_workers=2)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=lr,)
     loss_fn = torch.nn.CrossEntropyLoss()
