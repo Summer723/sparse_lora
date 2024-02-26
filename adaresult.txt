@@ -1,2 +1,16 @@
 Namespace(batch_size=64, device='cuda', epoch=1, finetune_strategy=None, frequency=1000, l1_lambda=0.01, l1_reg=False, last_layer=False, lora=True, lora_algo='adalora', lora_r=10, lora_r_lst=['10', '20', '30', '40'], lr=5e-05, model='SoftmaxBERT', path='None', seed=42)
 There are: 199820 trainable parameters
+Validation accuracy @ Epoch0: 0.05092838406562805
+Test accuracy @ Epoch0: 0.04883227497339249
+Namespace(batch_size=64, device='cuda', epoch=1, finetune_strategy=None, frequency=1000, l1_lambda=0.01, l1_reg=False, last_layer=False, lora=True, lora_algo='adalora', lora_r=20, lora_r_lst=['10', '20', '30', '40'], lr=5e-05, model='SoftmaxBERT', path='None', seed=42)
+There are: 384260 trainable parameters
+Validation accuracy @ Epoch0: 0.09283819794654846
+Test accuracy @ Epoch0: 0.0801486223936081
+Namespace(batch_size=64, device='cuda', epoch=1, finetune_strategy=None, frequency=1000, l1_lambda=0.01, l1_reg=False, last_layer=False, lora=True, lora_algo='adalora', lora_r=30, lora_r_lst=['10', '20', '30', '40'], lr=5e-05, model='SoftmaxBERT', path='None', seed=42)
+There are: 568700 trainable parameters
+Validation accuracy @ Epoch0: 0.07533156871795654
+Test accuracy @ Epoch0: 0.06953291594982147
+Namespace(batch_size=64, device='cuda', epoch=1, finetune_strategy=None, frequency=1000, l1_lambda=0.01, l1_reg=False, last_layer=False, lora=True, lora_algo='adalora', lora_r=40, lora_r_lst=['10', '20', '30', '40'], lr=5e-05, model='SoftmaxBERT', path='None', seed=42)
+There are: 753140 trainable parameters
+Validation accuracy @ Epoch0: 0.07904509454965591
+Test accuracy @ Epoch0: 0.06794055551290512
