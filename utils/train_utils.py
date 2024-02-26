@@ -1,6 +1,6 @@
 import torch
 from torch.utils.data import DataLoader
-from peft import LoraConfig, get_peft_model, TaskType
+from peft import LoraConfig, get_peft_model, TaskType, AdaLoraConfig
 from transformers import BertForSequenceClassification
 import torch.nn as nn
 
@@ -32,22 +32,32 @@ def test(model, dataset, device):
     return validation(model, dataset, device)
 
 
-def get_model(model, lora, last_layer, lora_r):
+def get_model(model, lora, last_layer, lora_r, lora_algo):
     if model.lower() not in ["softmaxbert"]:
         return "Model not supported"
     elif model.lower() == "softmaxbert":
-        peft_config = LoraConfig(
-            task_type=TaskType.SEQ_CLS,
-            r=lora_r,
-            lora_alpha=1,
-            lora_dropout=0.1,
+        if lora_algo.lower()=="lora":
+            peft_config = LoraConfig(
+                task_type=TaskType.SEQ_CLS,
+                r=lora_r,
+                lora_alpha=1,
+                lora_dropout=0.1,
             # target_modules=["q_proj", "v_proj","k_proj"]
-        )
-        if lora:
-            model = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=20)
-            model = get_peft_model(model, peft_config)
-            print("There are: {} trainable parameters".format(print_model_params(model)))
-
+            )
+            
+        elif lora_algo.lower()=="adalora":
+            peft_config =  config = AdaLoraConfig(
+                                                    peft_type="ADALORA", 
+                                                    task_type=TaskType.SEQ_CLS, 
+                                                    r=lora_r,
+                                                    lora_alpha=1,
+                                                    #target_modules=["q", "v"],
+                                                    lora_dropout=0.1,
+                                                )
+            
+        model = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=20)
+        model = get_peft_model(model, peft_config)
+        print("There are: {} trainable parameters".format(print_model_params(model)))
         return model
 
 

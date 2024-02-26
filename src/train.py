@@ -17,13 +17,15 @@ def train(model,
           seed,
           lora,
           lora_r,
+          lora_algo,
           l1_reg,
           l1_lambda,
+        #   lora_r_lst 
           ):
 
     torch.manual_seed(seed)
     # temporary
-    model = get_model(model, lora, last_layer,lora_r)
+    model = get_model(model, lora, last_layer,lora_r,lora_algo)
     model = model.to(device)
     dataset = datasets.NewsDataset()
     training_set, validation_set, test_set = torch.utils.data.random_split(dataset, [0.8, 0.1, 0.1])

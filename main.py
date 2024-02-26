@@ -9,8 +9,9 @@ import wandb
 from functools import partial 
 
 
-def main(hyperparams):
+def main(hyperparams,r):
     # run = wandb.init()
+    hyperparams.lora_r = r
     print(hyperparams)
     epoch = hyperparams.epoch
     lr = hyperparams.lr
@@ -27,6 +28,7 @@ def main(hyperparams):
     # lora_r = wandb.config.lora_r 
     l1_reg = hyperparams.l1_reg
     l1_lambda = hyperparams.l1_lambda
+    lora_algo = hyperparams.lora_algo
 
     train(model,
           epoch,
@@ -39,6 +41,7 @@ def main(hyperparams):
           seed,
           lora,
           lora_r,
+          lora_algo, 
           l1_reg,
           l1_lambda,
     )
@@ -59,15 +62,19 @@ if __name__ == "__main__":
     Parser.add_argument('--lr', type=float, default=5e-5)
     Parser.add_argument('--batch_size', type=int, default=64)
     Parser.add_argument('--last_layer', type='bool', default=False, help='Only optimize the last layer')
+    
     Parser.add_argument('--lora', type='bool', default=True, help='whether use lora')
     Parser.add_argument('--lora_r', type=int, default=10, help='hyperparameter for lora rank')
     # Parser.add_argument("--lora_r", nargs="+", help='hyperparameter for lora rank')
+    Parser.add_argument("--lora_algo", type=str, default="lora", help="peft algorithm")
+    
     Parser.add_argument("--device", default="cuda", type=str)
     Parser.add_argument("--model", default="SoftmaxBERT", type=str)
     Parser.add_argument("--finetune_strategy", type=str)
     Parser.add_argument("--seed", type=int, default=42)
+    
+    
     Parser.add_argument("--l1_lambda", type=int, default=0.01)
-
     Parser.add_argument("--l1_reg", type='bool', default=False, help='whether to sparsify the lora matrix using l1 reg')
 
 
@@ -91,5 +98,6 @@ if __name__ == "__main__":
     # sweep_id = wandb.sweep(sweep=sweep_config, project="lora_r hyperparameter")
     # train = partial(main, hyperparams)
     # wandb.agent(sweep_id, function=train)
-    main(hyperparams)
+    for r in [10,20,30,40,50,60,70,80,90,100]:
+        main(hyperparams, r)
     
