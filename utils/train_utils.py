@@ -46,10 +46,11 @@ def get_model(model, lora, last_layer, lora_r, lora_algo):
             )
             
         elif lora_algo.lower()=="adalora":
-            peft_config =  config = AdaLoraConfig(
+            peft_config =  AdaLoraConfig(
                                                     peft_type="ADALORA", 
                                                     task_type=TaskType.SEQ_CLS, 
-                                                    r=lora_r,
+                                                    target_r = lora_r,
+                                                    init_r = lora_r//2,
                                                     lora_alpha=1,
                                                     #target_modules=["q", "v"],
                                                     lora_dropout=0.1,

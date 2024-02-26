@@ -4,7 +4,7 @@ from utils.train_utils import validation, test, get_model
 import torch.nn as nn
 import src.dataset as datasets
 from tqdm import tqdm 
-import wandb 
+# import wandb 
 
 def train(model,
           epoch,

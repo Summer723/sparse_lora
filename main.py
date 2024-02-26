@@ -5,7 +5,7 @@ from src.train import train
 from utils.utils import strtobool
 import os
 import local_config
-import wandb
+# import wandb
 from functools import partial 
 
 
@@ -25,6 +25,7 @@ def main(hyperparams,r):
     seed = hyperparams.seed
     lora = hyperparams.lora
     lora_r = hyperparams.lora_r
+
     # lora_r = wandb.config.lora_r 
     l1_reg = hyperparams.l1_reg
     l1_lambda = hyperparams.l1_lambda
@@ -65,7 +66,7 @@ if __name__ == "__main__":
     
     Parser.add_argument('--lora', type='bool', default=True, help='whether use lora')
     Parser.add_argument('--lora_r', type=int, default=10, help='hyperparameter for lora rank')
-    # Parser.add_argument("--lora_r", nargs="+", help='hyperparameter for lora rank')
+    Parser.add_argument("--lora_r_lst", nargs="+", help='hyperparameter for lora rank')
     Parser.add_argument("--lora_algo", type=str, default="lora", help="peft algorithm")
     
     Parser.add_argument("--device", default="cuda", type=str)
@@ -98,6 +99,7 @@ if __name__ == "__main__":
     # sweep_id = wandb.sweep(sweep=sweep_config, project="lora_r hyperparameter")
     # train = partial(main, hyperparams)
     # wandb.agent(sweep_id, function=train)
-    for r in [10,20,30,40,50,60,70,80,90,100]:
-        main(hyperparams, r)
+    for r in hyperparams.lora_r_lst:
+
+        main(hyperparams, int(r))
     
